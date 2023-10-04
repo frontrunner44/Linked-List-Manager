@@ -52,14 +52,13 @@ class LinkedList {
   insertNode(data, position) {
     const newNode = new Node(data);
     if(position > this.size+1 || position === 0 || isNaN(position) || data === undefined) { // We use this.size+1 because we want to allow inserting the new node to the end (if the list is 5 long, we can insert 6 to put it in position 6, ie at the end)
-      console.log("Invalid position or empty data provided.");
       throw new Error("Invalid position or empty data provided.");
     } else if(position === 1) { // If position is 1, we want to insert the new node at the start of the list into position 1
       this.prependNode(data);
-    } else if(position === this.size+1) {
+    } else if(position === this.size+1) { // If the position is 1 more than the list size, we want this node to be placed at the end of the list and for it to become the new tail
       this.appendNode(data);
-    } else { // otherwise if position is not 1 or 1 greater than the list size, we will insert it at the given position, and we'll call a function to retrieve the position BEFORE the position we want to place the new node
-      let current = this.getNodeByPosition(position-1); // Grab the position directly BEFORE the position we want to insert the new node so we can place the new node AFTER this node.
+    } else { // otherwise if position is not 1 or 1 greater than the list size, we will insert it at the given position, so we'll call a function to retrieve the position BEFORE the position we want to place the new node so we can place the new node after
+      let current = this.getNodeByPosition(position-1); // Grab the position directly BEFORE the node that is currently in the position we want to insert the new node so we can place the new node AFTER this node.
       if(current.next) { // If there is a node after the current node,
         current.next.previous = newNode; // we set the "previous" property of the node that comes after the current node to reference the newly created node,
         newNode.next = current.next; // then set the new node's "next" property to reference the node that comes after the current node, since the new node will be placed after the current node
@@ -83,9 +82,8 @@ class LinkedList {
 
   // Function that will return a node when provided with a node position. Will traverse the list either forwards or backwards, depending on which is faster.
   getNodeByPosition(position) {
-    if(position === 0 || this.size < position || isNaN(position)) {
-      console.log("Invalid position.");
-      throw new Error("Invalid position.");
+    if(this.isInvalidPosition(position)) {
+      throw new Error("Invalid position provided.");
     } else {
       let edge, direction, steps;
       if (position <= this.size / 2) { // If the postition of the requested node is at the first half of the list
@@ -109,10 +107,45 @@ class LinkedList {
       }
     }
   }
+
+  deleteNode(position) {
+    let current = this.getNodeByPosition(position); // Grabs the node we want to delete
+    if(this.size === 1) { // If the node we want to delete is the only node in the list, we essentially empty the list
+      this.head = null;
+      this.tail = null;
+    } else {
+      if(current.previous !== null) { // If a node is found before the node we want to delete, we
+        current.previous.next = current.next; // set that node's "next" pointer to point to the same node the current node's next pointer is pointing at
+        if(current.previous.next === null) { // and then we check if the previous node's next pointer is null, meaning that this node was the tail and now the previous node will become the tail
+          this.tail = current.previous; // so we set the tail to the previous node
+        }
+      }
+      if(current.next !== null) { // If a node is found before the node we want to delete, we
+        current.next.previous = current.previous; // set that node's "previous" pointer to point at the current node's "previous"
+        if(current.next.previous === null) { // and then we check if the next node's previous is null, indicating it is now the head
+          this.head = current.next; // and so we set the head to the next node
+        }
+      }
+    }
+    // And finally, we disconnect this node from the list and reduce the list size.
+    current.next = null;
+    current.previous = null;
+    this.size--;
+  }
+
+  // Helper method for other methods that accept a position parameter.
+  isInvalidPosition(position) {
+    if(position === 0 || this.size < position || isNaN(position)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 const nodeDatabase = new LinkedList;
 
+// Just a test function to generate a linked list.
 function generateLinkedList(amount) {
   for(let i = 1; i <= amount; i++) {
     const data = `This should be in position ${i}`; //Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
