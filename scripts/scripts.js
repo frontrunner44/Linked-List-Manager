@@ -43,7 +43,7 @@ class LinkedList {
   }
 
   // Adds the first node as the tail and head
-  addFirstNode(newNode) {
+  #addFirstNode(newNode) {
     this.head = newNode;
     this.tail = newNode;
   }
@@ -133,7 +133,7 @@ class LinkedList {
   }
 
   // Helper method for other methods that accept a position parameter.
-  isInvalidPosition(position) {
+  #isInvalidPosition(position) {
     if(position === 0 || this.size < position || isNaN(position)) {
       return true;
     } else {
@@ -186,7 +186,7 @@ class LinkedList {
     this.listToConsole();
   }
 
-  adjustListBoundaries(node) {
+  #adjustListBoundaries(node) {
     if(node.previous === null) {
       this.head = node;
     }
