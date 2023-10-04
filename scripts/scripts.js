@@ -67,7 +67,7 @@ class LinkedList {
       current.next = newNode; // set the current node's "next" property to a reference of the new node.
     }
     this.size++;
-    console.log(nodeDatabase);
+    console.log(myList);
   }
 
   listToConsole() {
@@ -108,6 +108,7 @@ class LinkedList {
     }
   }
 
+  // Method to delete nodes by their position.
   deleteNode(position) {
     let current = this.getNodeByPosition(position); // Grabs the node we want to delete
     if(this.size === 1) { // If the node we want to delete is the only node in the list, we essentially empty the list
@@ -116,21 +117,19 @@ class LinkedList {
     } else {
       if(current.previous !== null) { // If a node is found before the node we want to delete, we
         current.previous.next = current.next; // set that node's "next" pointer to point to the same node the current node's next pointer is pointing at
-        if(current.previous.next === null) { // and then we check if the previous node's next pointer is null, meaning that this node was the tail and now the previous node will become the tail
-          this.tail = current.previous; // so we set the tail to the previous node
-        }
+        // Can replace the below check with a helper method to send over a node and if checks whether it needs to update the tail or head status
+        this.adjustListBoundaries(current.previous.next) // and then we check if the previous node's next pointer is now null, indicating that it is now the tail and handle setting it as the new tail with the helper function
       }
-      if(current.next !== null) { // If a node is found before the node we want to delete, we
+      if(current.next !== null) { // If a node is found after the node we want to delete, we
         current.next.previous = current.previous; // set that node's "previous" pointer to point at the current node's "previous"
-        if(current.next.previous === null) { // and then we check if the next node's previous is null, indicating it is now the head
-          this.head = current.next; // and so we set the head to the next node
-        }
+        this.adjustListBoundaries(current.next.previous) // and then we check if the previous node's previous pointer is now null, indicating that it is now the head and handle setting it as the new head with the helper function
       }
     }
     // And finally, we disconnect this node from the list and reduce the list size.
     current.next = null;
     current.previous = null;
     this.size--;
+    this.listToConsole();
   }
 
   // Helper method for other methods that accept a position parameter.
@@ -141,16 +140,70 @@ class LinkedList {
       return false;
     }
   }
+
+  // Method for grabbing the middle node. Uses the getNodeByPosition helper method.
+  getMiddleNode() {
+    const result = this.getNodeByPosition(this.size/2);
+    console.log(result);
+    return result;
+  }
+
+  // Swaps the positions of two nodes in the list. Uses the getNodeByPosition helper function to achieve this.
+  swapNodes(pos1, pos2) {
+    console.log("Swap called with positions:", pos1, pos2);
+    if(this.isInvalidPosition(pos1) || this.isInvalidPosition(pos2) || pos1 === pos2) {
+      throw new Error("Invalid positions provided.");
+    }
+    // Grab the nodes by their provided position using the helper function getNodeByPosition. We make it so that node1 < node2 in position with ternary if statements so we can more consistently handle the edge case where the two nodes are side by side.
+    let node1 = pos1 < pos2 ? this.getNodeByPosition(pos1) : this.getNodeByPosition(pos2);
+    let node2 = pos1 > pos2 ? this.getNodeByPosition(pos1) : this.getNodeByPosition(pos2);
+    // Store backups to the node1.next and node1.previous so we don't lose them during the swap
+    let previousBackup = node1.previous;
+    let nextBackup = node1.next;
+    // Swap the nodes .next and .previous pointers.
+    node1.next = node2.next;
+    // If node1 is the same node as node2.previous, this means the two are side by side and will be swapped, so we can set node1's .previous to node2.
+    node1 !== node2.previous ? node1.previous = node2.previous : node1.previous = node2;
+    // If node2 is the same as node1.next, this means the two are side by side and will be swapped, so we can set node2's .next to node1.
+    node2 !== nextBackup ? node2.next = nextBackup : node2.next = node1;
+    node2.previous = previousBackup;
+    // Handle updating adjacent node pointers here as well.
+    if(node1.previous !== null) {
+      node1.previous.next = node1;
+    }
+    if(node2.previous !== null) {
+      node2.previous.next = node2;
+    }
+    if(node1.next !== null) {
+      node1.next.previous = node1;
+    }
+    if(node2.next !== null) {
+      node2.next.previous = node2;
+    }
+    // After swapping the nodes we check if either are now the head or tail. Can make a method for this later to call and check + update tail and head on the passed node
+    this.adjustListBoundaries(node1);
+    this.adjustListBoundaries(node2);
+    this.listToConsole();
+  }
+
+  adjustListBoundaries(node) {
+    if(node.previous === null) {
+      this.head = node;
+    }
+    if(node.next === null) {
+      this.tail = node;
+    }
+  }
 }
 
-const nodeDatabase = new LinkedList;
+const myList = new LinkedList;
 
 // Just a test function to generate a linked list.
 function generateLinkedList(amount) {
   for(let i = 1; i <= amount; i++) {
-    const data = `This should be in position ${i}`; //Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
-    nodeDatabase.appendNode(data);
+    const data = `This should initially be in position ${i}`; //Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
+    myList.appendNode(data);
   }
-  nodeDatabase.listToConsole();
-  console.log(nodeDatabase);
+  myList.listToConsole();
+  console.log(myList);
 }
