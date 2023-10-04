@@ -19,7 +19,7 @@ class LinkedList {
     console.log("Append called");
     const newNode = new Node(data); // Creates a new node
     if(!this.head) { // If there is no head, the list is empty
-      this.addFirstNode(newNode); // so we add this new node as the first node
+      this.#addFirstNode(newNode); // so we add this new node as the first node
     } else { 
       newNode.previous = this.tail; // Sets the new node's "previous" pointer to point to the current tail.
       this.tail.next = newNode; // Sets the current tail's "next" pointer to point to the new node.
@@ -33,7 +33,7 @@ class LinkedList {
     console.log("Prepend called.");
     const newNode = new Node(data);
     if(!this.head) { // If there is no head, the list is empty
-      this.addFirstNode(newNode); // so we add this new node as the first node.
+      this.#addFirstNode(newNode); // so we add this new node as the first node.
     } else { 
       this.head.previous = newNode; // set the current head's previous to the new node,
       newNode.next = this.head; // then set the new node's next to the current head
@@ -82,7 +82,7 @@ class LinkedList {
 
   // Function that will return a node when provided with a node position. Will traverse the list either forwards or backwards, depending on which is faster.
   getNodeByPosition(position) {
-    if(this.isInvalidPosition(position)) {
+    if(this.#isInvalidPosition(position)) {
       throw new Error("Invalid position provided.");
     } else {
       let edge, direction, steps;
@@ -118,11 +118,11 @@ class LinkedList {
       if(current.previous !== null) { // If a node is found before the node we want to delete, we
         current.previous.next = current.next; // set that node's "next" pointer to point to the same node the current node's next pointer is pointing at
         // Can replace the below check with a helper method to send over a node and if checks whether it needs to update the tail or head status
-        this.adjustListBoundaries(current.previous.next) // and then we check if the previous node's next pointer is now null, indicating that it is now the tail and handle setting it as the new tail with the helper function
+        this.#adjustListBoundaries(current.previous) // and then we check if the previous node's next pointer is now null via the helper function, which would indicate that it is now the tail and handle setting it as the new tail with the helper function
       }
       if(current.next !== null) { // If a node is found after the node we want to delete, we
         current.next.previous = current.previous; // set that node's "previous" pointer to point at the current node's "previous"
-        this.adjustListBoundaries(current.next.previous) // and then we check if the previous node's previous pointer is now null, indicating that it is now the head and handle setting it as the new head with the helper function
+        this.#adjustListBoundaries(current.next) // and then we check if the previous node's previous pointer is now null via the helper function, which would indicate that it is now the head and handle setting it as the new head with the helper function
       }
     }
     // And finally, we disconnect this node from the list and reduce the list size.
@@ -151,7 +151,7 @@ class LinkedList {
   // Swaps the positions of two nodes in the list. Uses the getNodeByPosition helper function to achieve this.
   swapNodes(pos1, pos2) {
     console.log("Swap called with positions:", pos1, pos2);
-    if(this.isInvalidPosition(pos1) || this.isInvalidPosition(pos2) || pos1 === pos2) {
+    if(this.#isInvalidPosition(pos1) || this.#isInvalidPosition(pos2) || pos1 === pos2) {
       throw new Error("Invalid positions provided.");
     }
     // Grab the nodes by their provided position using the helper function getNodeByPosition. We make it so that node1 < node2 in position with ternary if statements so we can more consistently handle the edge case where the two nodes are side by side.
@@ -181,8 +181,8 @@ class LinkedList {
       node2.next.previous = node2;
     }
     // After swapping the nodes we check if either are now the head or tail. Can make a method for this later to call and check + update tail and head on the passed node
-    this.adjustListBoundaries(node1);
-    this.adjustListBoundaries(node2);
+    this.#adjustListBoundaries(node1);
+    this.#adjustListBoundaries(node2);
     this.listToConsole();
   }
 
