@@ -6,7 +6,7 @@ This is a JavaScript implementation of a doubly linked list. A doubly linked lis
 
 ## Usage
 
-To use this implementation, you can follow these steps:
+To use test this implementation, you can follow these steps after opening the blank index.html and accessing the console:
 
 1. Create a new instance of the `LinkedList` class:
 
