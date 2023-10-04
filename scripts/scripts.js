@@ -16,6 +16,7 @@ class LinkedList {
 
   // Add a node to the end of the list.
   appendNode(data) {
+    console.log("Append called");
     const newNode = new Node(data); // Creates a new node
     if(!this.head) { // If there is no head, the list is empty
       this.addFirstNode(newNode); // so we add this new node as the first node
@@ -29,6 +30,7 @@ class LinkedList {
 
   // Add a node to the front of the list.
   prependNode(data) {
+    console.log("Prepend called.");
     const newNode = new Node(data);
     if(!this.head) { // If there is no head, the list is empty
       this.addFirstNode(newNode); // so we add this new node as the first node.
@@ -66,6 +68,7 @@ class LinkedList {
       current.next = newNode; // set the current node's "next" property to a reference of the new node.
     }
     this.size++;
+    console.log(nodeDatabase);
   }
 
   listToConsole() {
@@ -78,17 +81,30 @@ class LinkedList {
     }
   }
 
+  // Function that will return a node when provided with a node position. Will traverse the list either forwards or backwards, depending on which is faster.
   getNodeByPosition(position) {
     if(position === 0 || this.size < position || isNaN(position)) {
       console.log("Invalid position.");
       throw new Error("Invalid position.");
     } else {
-      let current = this.head;
-      for(let i = 1; i <= position; i++) {
-        if(i === position) {
+      let edge, direction, steps;
+      if (position <= this.size / 2) { // If the postition of the requested node is at the first half of the list
+        console.log("Traversing forward");
+        edge = "head"; // we set the edge to start at to be the head,
+        direction = "next"; // the property we traverse to be "next", and
+        steps = position; // we set the steps we need to traverses to the position given (we start iterating with i at 1)
+      } else { // Otherwise, if the requested node is in the last half of the list, we traverse backwwards and,
+        console.log("Traversing backwards");
+        edge = "tail"; // set the edge to start at to be the tail,
+        direction = "previous"; // then set the property to traverse to be "previous"
+        steps = this.size - position + 1; // and we iterate this.size / position + 1 times, since we start iterating at i = 1
+      }
+      let current = this[edge]; // Sets to tail or head
+      for(let i = 1; i <= steps; i++) { // starts traversing the next or previous references
+        if(i === steps) { // once we've reached our goal iterations, we should be at the requested node, so we return it
           return current;
         } else {
-          current = current.next;
+          current = current[direction]; // if we haven't reached our steps yet, we continue traversing either "next" or "previous" references
         }
       }
     }
@@ -102,4 +118,6 @@ function generateLinkedList(amount) {
     const data = `This should be in position ${i}`; //Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
     nodeDatabase.appendNode(data);
   }
+  nodeDatabase.listToConsole();
+  console.log(nodeDatabase);
 }
