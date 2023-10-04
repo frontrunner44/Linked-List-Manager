@@ -1,10 +1,11 @@
-Sure, here's a README.md for your linked list implementation:
-
 # Doubly Linked List Implementation
 
 This is a JavaScript implementation of a doubly linked list. A doubly linked list is a data structure where each node points to both the next and previous nodes, allowing for efficient traversal in both directions.
 
 ## Usage
+To test and experiment with the LinkedList class, you can open the `index.html` file in your web browser and access the browser's developer console. The included test functions and examples demonstrate how to use the LinkedList class to create and manipulate linked lists.
+
+Please note that the `index.html` file is included solely for interactive testing purposes and is not required for using the LinkedList class in other JavaScript environments.
 
 To use this implementation, you can follow these steps:
 
