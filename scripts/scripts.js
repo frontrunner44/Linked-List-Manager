@@ -14,22 +14,36 @@ class LinkedList {
     this.size = 0;
   }
 
-  // Add a node to the end
+  // Add a node to the end of the list.
   appendNode(data) {
     const newNode = new Node(data); // Creates a new node
-    newNode.previous = this.tail; // Sets the new node's "previous" pointer to point to the current tail.
-    this.tail.next = newNode; // Sets the current tail's "next" pointer to point to the new node.
-    this.tail = newNode; // and finally sets the tail to the new node
+    if(!this.head) { // If there is no head, the list is empty
+      this.addFirstNode(newNode); // so we add this new node as the first node
+    } else { 
+      newNode.previous = this.tail; // Sets the new node's "previous" pointer to point to the current tail.
+      this.tail.next = newNode; // Sets the current tail's "next" pointer to point to the new node.
+      this.tail = newNode; // and finally sets the tail to the new node
+    }
+    this.size++;
   }
 
   // Add a node to the front of the list.
   prependNode(data) {
     const newNode = new Node(data);
-    if(this.head) { // IF a head already exists, we
+    if(!this.head) { // If there is no head, the list is empty
+      this.addFirstNode(newNode); // so we add this new node as the first node.
+    } else { 
       this.head.previous = newNode; // set the current head's previous to the new node,
       newNode.next = this.head; // then set the new node's next to the current head
+      this.head = newNode; // and finally we set the newNode as the new head of the list irregarddless of whether there was already a head
     }
-    this.head = newNode; // and finally we set the newNode as the new head of the list irregarddless of whether there was already a head
+    this.size++;
+  }
+
+  // Adds the first node as the tail and head
+  addFirstNode(newNode) {
+    this.head = newNode;
+    this.tail = newNode;
   }
 
   // Inserts a node at a specific position in the list.  
