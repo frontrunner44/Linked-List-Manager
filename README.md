@@ -1,5 +1,3 @@
-Sure, here's a README.md for your linked list implementation:
-
 # Doubly Linked List Implementation
 
 This is a JavaScript implementation of a doubly linked list. A doubly linked list is a data structure where each node points to both the next and previous nodes, allowing for efficient traversal in both directions.
