@@ -15,30 +15,30 @@ To use this implementation, you can follow these steps:
    const myList = new LinkedList();
    ```
 
-2. Add nodes to the list using the `appendNode(data)` or `prependNode(data)` methods. For example:
+2. Add nodes to the list using the `append(data)` or `prepend(data)` methods. For example:
 
    ```javascript
-   myList.appendNode("Node 1");
-   myList.appendNode("Node 2");
-   myList.prependNode("Node 0");
+   myList.append("Node 1");
+   myList.append("Node 2");
+   myList.prepend("Node 0");
    ```
 
-3. You can insert nodes at specific positions using the `insertNode(data, position)` method. Position 1 is the front of the list, and position `size + 1` is the end of the list.
+3. You can insert nodes at specific positions using the `insert(data, position)` method. Position 1 is the front of the list, and position `size + 1` is the end of the list.
 
    ```javascript
-   myList.insertNode("Node 3", 3);
+   myList.insert("Node 3", 3);
    ```
 
-4. To delete a node at a specific position, use the `deleteNode(position)` method:
+4. To delete a node at a specific position, use the `delete(position)` method:
 
    ```javascript
-   myList.deleteNode(2); // Deletes the node at position 2
+   myList.delete(2); // Deletes the node at position 2
    ```
 
-5. To swap the positions of two nodes in the list, use the `swapNodes(pos1, pos2)` method:
+5. To swap the positions of two nodes in the list, use the `swap(pos1, pos2)` method:
 
    ```javascript
-   myList.swapNodes(1, 3); // Swaps nodes at positions 1 and 3
+   myList.swap(1, 3); // Swaps nodes at positions 1 and 3
    ```
 
 6. You can retrieve the middle node of the list using the `getMiddleNode()` method:
@@ -47,10 +47,10 @@ To use this implementation, you can follow these steps:
    const middleNode = myList.getMiddleNode();
    ```
 
-7. To print the current state of the list to the console, use the `listToConsole()` method:
+7. To print the current state of the list to the console, use the `log` method:
 
    ```javascript
-   myList.listToConsole();
+   myList.log();
    ```
 
 8. You can splice a portion of the list into a new linked list using the `splice(start, end)` method:
@@ -59,10 +59,10 @@ To use this implementation, you can follow these steps:
    const spliced = myList.splice(2, 4); // Creates a new linked list from positions 2 to 4
    ```
 
-9. To swap the properties of two nodes, use the `swapNodeProperties(pos1, pos2, property)` method:
+9. To swap the properties of two nodes, use the `swapProperties(pos1, pos2, property)` method:
 
     ```javascript
-    myList.swapNodeProperties(1, 3, "data"); // Swaps the data properties of nodes at positions 1 and 3
+    myList.swapProperties(1, 3, "data"); // Swaps the data properties of nodes at positions 1 and 3
     ```
 
 10. You can search for nodes based on specific properties and values using the `search(property, value)` method. This method scans through the data objects of each node in the list and returns an array containing all nodes that match the provided criteria.
@@ -76,17 +76,25 @@ To use this implementation, you can follow these steps:
     myList.reverse() // Will reverse the linked list by inverting each node's .next and .previous pointers.
     ```
 
+12. You can remove nodes with duplicate data by using the `removeDuplicates()` method:
+    ```JavaScript
+    myList.removeDuplicates() // Removes any nodes containing duplicate data
+    ```
+
 ## Methods
 
-- `appendNode(data)`: Adds a node to the end of the list.
-- `prependNode(data)`: Adds a node to the front of the list.
-- `insertNode(data, position)`: Inserts a node at a specific position in the list.
-- `deleteNode(position)`: Deletes a node at a specific position in the list.
+- `append(data)`: Adds a node to the end of the list.
+- `prepend(data)`: Adds a node to the front of the list.
+- `insert(data, position)`: Inserts a node at a specific position in the list.
+- `delete(position)`: Deletes a node at a specific position in the list.
 - `getMiddleNode()`: Returns the middle node of the list.
-- `swapNodes(pos1, pos2)`: Swaps the positions of two nodes in the list.
-- `swapNodeProperties(pos1, pos2, property)`: Swaps the properties of two nodes.
+- `swap(pos1, pos2)`: Swaps the positions of two nodes in the list.
+- `swapProperties(pos1, pos2, property)`: Swaps the properties of two nodes.
 - `splice(start, end)`: Creates a new linked list from a portion of the original list.
-- `listToConsole()`: Prints the current state of the list to the console.
+- `log`: Prints the current state of the list to the console.
+- `search(property, value)`: returns an array containing all nodes with data containing the matching property and property value.
+- `reverse()`: reverses the linked list.
+- `removeDuplicates()`: finds and removes nodes with duplicate data.
 
 ## Note
 
