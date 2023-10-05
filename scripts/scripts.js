@@ -113,10 +113,14 @@ class LinkedList {
       }
     }
     // And finally, we disconnect this node from the list and reduce the list size.
-    current.next = null;
-    current.previous = null;
+    this.#disconnectNode(current);
     this.size--;
     this.listToConsole();
+  }
+
+  #disconnectNode(node) {
+    node.next = null;
+    node.previous = null;
   }
 
   // Method for grabbing the middle node. Uses the getNodeByPosition helper method.
@@ -224,16 +228,29 @@ class LinkedList {
     }
     let result = []; // Initialize an array to store the results
     let current = this.head; // Start checking from the head of the current list.
-    let position = 1;
-    while(position <= this.size) {
+    for(let i = 1; i <= this.size; i++) {
       if(current.data.hasOwnProperty(property) && current.data[property] === value) {
         result.push(current);
       }
       current = current.next;
-      position++
     }
     console.log(result);
     return result;
+  }
+
+  // Reverse the linked list. We use a for loop for easier usability on sub-lists that do not end in with a tail pointing to "null". The for loop is more flexible and iterates this.size amount of times instead of searching for a null .next.
+  reverse() {
+    let current = this.head;
+    for(let i = 1; i <= this.size; i++) {
+      const tempNext = current.next;
+      current.next = current.previous;
+      current.previous = tempNext;
+      current = tempNext;
+    }
+    const tempHead = this.head;
+    this.head = this.tail;
+    this.tail = tempHead;
+    this.listToConsole();
   }
 }
 
