@@ -53,6 +53,18 @@ To use this implementation, you can follow these steps:
    myList.listToConsole();
    ```
 
+8. You can also splice a portion of the list into a new linked list using the `splice(start, end)` method:
+
+   ```javascript
+   const spliced = myList.splice(2, 4); // Creates a new linked list from positions 2 to 4
+   ```
+
+9. To swap the properties of two nodes, use the `swapNodeProperties(pos1, pos2, property)` method:
+
+   ```javascript
+   myList.swapNodeProperties(1, 3, "data"); // Swaps the data properties of nodes at positions 1 and 3
+   ```
+
 ## Methods
 
 - `appendNode(data)`: Adds a node to the end of the list.
@@ -61,10 +73,12 @@ To use this implementation, you can follow these steps:
 - `deleteNode(position)`: Deletes a node at a specific position in the list.
 - `getMiddleNode()`: Returns the middle node of the list.
 - `swapNodes(pos1, pos2)`: Swaps the positions of two nodes in the list.
+- `swapNodeProperties(pos1, pos2, property)`: Swaps the properties of two nodes.
+- `splice(start, end)`: Creates a new linked list from a portion of the original list.
 - `listToConsole()`: Prints the current state of the list to the console.
 
 ## Note
 
-This implementation includes methods for handling various scenarios, such as adding nodes, deleting nodes, and swapping nodes, ensuring the integrity of the doubly linked list is maintained. When manipulating nodes, the list will be traversed forward or backward automatically, depending on which is faster.
+This implementation includes methods for handling various scenarios, such as adding nodes, deleting nodes, swapping nodes, and more, ensuring the integrity of the doubly linked list is maintained. When manipulating nodes, the list will be traversed forward or backward automatically, depending on which is faster.
 
 Feel free to use and modify this implementation as needed for your specific use case.
