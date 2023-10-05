@@ -2,8 +2,8 @@
 class Node {
   constructor(data) {
     this.data = data;
-    this.next = null;
     this.previous = null;
+    this.next = null;
   }
 }
 
@@ -51,33 +51,21 @@ class LinkedList {
   // Inserts a node at a specific position in the list.  
   insertNode(data, position) {
     const newNode = new Node(data);
-    if(position > this.size+1 || position === 0 || isNaN(position) || data === undefined) { // We use this.size+1 because we want to allow inserting the new node to the end (if the list is 5 long, we can insert 6 to put it in position 6, ie at the end)
-      throw new Error("Invalid position or empty data provided.");
+    if(position > this.size+1 || position === 0 || isNaN(position)) { // We use this.size+1 because we want to allow inserting the new node to the end (if the list is 5 long, we can insert 6 to put it in position 6, ie at the end)
+      throw new Error("Invalid position.");
     } else if(position === 1) { // If position is 1, we want to insert the new node at the start of the list into position 1
       this.prependNode(data);
     } else if(position === this.size+1) { // If the position is 1 more than the list size, we want this node to be placed at the end of the list and for it to become the new tail
       this.appendNode(data);
     } else { // otherwise if position is not 1 or 1 greater than the list size, we will insert it at the given position, so we'll call a function to retrieve the position BEFORE the position we want to place the new node so we can place the new node after
       let current = this.getNodeByPosition(position-1); // Grab the position directly BEFORE the node that is currently in the position we want to insert the new node so we can place the new node AFTER this node.
-      if(current.next) { // If there is a node after the current node,
-        current.next.previous = newNode; // we set the "previous" property of the node that comes after the current node to reference the newly created node,
-        newNode.next = current.next; // then set the new node's "next" property to reference the node that comes after the current node, since the new node will be placed after the current node
-      }
+      current.next.previous = newNode; // Set the "previous" property of the node that comes after the current node to reference the newly created node,
+      newNode.next = current.next; // then set the new node's "next" property to reference the node that comes after the current node, since the new node will be placed after the current node
       newNode.previous = current; // Finally, we set the "previous" property of the new node to a reference to the current node and
       current.next = newNode; // set the current node's "next" property to a reference of the new node.
     }
     this.size++;
-    console.log(myList);
-  }
-
-  listToConsole() {
-    let current = this.head;
-    let position = 1;
-    while(current) {
-      console.log(`Node at position ${position}`, current);
-      current = current.next;
-      position++;
-    }
+    this.listToConsole();
   }
 
   // Function that will return a node when provided with a node position. Will traverse the list either forwards or backwards, depending on which is faster.
@@ -97,7 +85,7 @@ class LinkedList {
         direction = "previous"; // then set the property to traverse to be "previous"
         steps = this.size - position + 1; // and we iterate this.size / position + 1 times, since we start iterating at i = 1
       }
-      let current = this[edge]; // Sets to tail or head
+      let current = this[edge]; // Sets our starting position to the tail or head
       for(let i = 1; i <= steps; i++) { // starts traversing the next or previous references
         if(i === steps) { // once we've reached our goal iterations, we should be at the requested node, so we return it
           return current;
@@ -115,13 +103,12 @@ class LinkedList {
       this.head = null;
       this.tail = null;
     } else {
-      if(current.previous !== null) { // If a node is found before the node we want to delete, we
-        current.previous.next = current.next; // set that node's "next" pointer to point to the same node the current node's next pointer is pointing at
-        // Can replace the below check with a helper method to send over a node and if checks whether it needs to update the tail or head status
+      if(current !== this.head) { // If this node is not the head, we
+        current.previous.next = current.next; // set the previous node's "next" pointer to point to the same node the current node's next pointer is pointing at
         this.#adjustListBoundaries(current.previous) // and then we check if the previous node's next pointer is now null via the helper function, which would indicate that it is now the tail and handle setting it as the new tail with the helper function
       }
-      if(current.next !== null) { // If a node is found after the node we want to delete, we
-        current.next.previous = current.previous; // set that node's "previous" pointer to point at the current node's "previous"
+      if(current !== this.tail) { // If this node is not the tail
+        current.next.previous = current.previous; // set the next node's "previous" pointer to point at the current node's "previous"
         this.#adjustListBoundaries(current.next) // and then we check if the previous node's previous pointer is now null via the helper function, which would indicate that it is now the head and handle setting it as the new head with the helper function
       }
     }
@@ -132,15 +119,6 @@ class LinkedList {
     this.listToConsole();
   }
 
-  // Helper method for other methods that accept a position parameter.
-  #isInvalidPosition(position) {
-    if(position === 0 || this.size < position || isNaN(position)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // Method for grabbing the middle node. Uses the getNodeByPosition helper method.
   getMiddleNode() {
     const result = this.getNodeByPosition(this.size/2);
@@ -148,7 +126,22 @@ class LinkedList {
     return result;
   }
 
-  // Swaps the positions of two nodes in the list. Uses the getNodeByPosition helper function to achieve this.
+  // Swaps the properties of two nodes. This can be a more efficient method of swapping node positions via swapping their data references.
+  swapNodeProperties(pos1, pos2, property) {
+    const node1 = this.getNodeByPosition(pos1); // Get a refernce to the first node
+    const node2 = this.getNodeByPosition(pos2); // Get a reference to the second node
+    if(this.#isInvalidPosition(pos1) || this.#isInvalidPosition(pos2) || pos1 === pos2 || property === "next" || property === "previous") {
+      throw new Error("Invalid position(s) or property provided.");
+    } else if(!node1.hasOwnProperty(property) || !node2.hasOwnProperty(property)) {
+      throw new Error ("Both nodes must have the provided property.");
+    }
+    const node1Prop = node1[property];
+    node1[property] = node2[property];
+    node2[property] = node1Prop;
+    this.listToConsole();
+  }
+
+  // This method does a "hard" swap on the nodes, which essentially keeps the nodes in tact and exchanges their .next and .previous references. This is for more complex linked lists where not all nodes are necessarily interchangable via the swapping of their data or other properties.
   swapNodes(pos1, pos2) {
     console.log("Swap called with positions:", pos1, pos2);
     if(this.#isInvalidPosition(pos1) || this.#isInvalidPosition(pos2) || pos1 === pos2) {
@@ -168,16 +161,16 @@ class LinkedList {
     node2 !== nextBackup ? node2.next = nextBackup : node2.next = node1;
     node2.previous = previousBackup;
     // Handle updating adjacent node pointers here as well.
-    if(node1.previous !== null) {
+    if(node1 !== this.head) {
       node1.previous.next = node1;
     }
-    if(node2.previous !== null) {
+    if(node2 !== this.head) {
       node2.previous.next = node2;
     }
-    if(node1.next !== null) {
+    if(node1 !== this.tail) {
       node1.next.previous = node1;
     }
-    if(node2.next !== null) {
+    if(node2 !== this.tail) {
       node2.next.previous = node2;
     }
     // After swapping the nodes we check if either are now the head or tail. Can make a method for this later to call and check + update tail and head on the passed node
@@ -186,12 +179,45 @@ class LinkedList {
     this.listToConsole();
   }
 
+  splice(start, end) {
+    if(this.#isInvalidPosition(start) || this.#isInvalidPosition(end) || start >= end) {
+      throw new Error("Invalid start and end parameters provided.");
+    }
+    const newHead = this.getNodeByPosition(start);
+    const newTail = this.getNodeByPosition(end);
+    const splicedList = new LinkedList();
+    splicedList.head = newHead;
+    splicedList.tail = newTail;
+    splicedList.size = end - start + 1;
+    splicedList.listToConsole();
+    return splicedList;
+  }
+
   #adjustListBoundaries(node) {
     if(node.previous === null) {
       this.head = node;
     }
     if(node.next === null) {
       this.tail = node;
+    }
+  }
+
+  // Helper method for other methods that accept a position parameter.
+  #isInvalidPosition(position) {
+    if(position === 0 || this.size < position || isNaN(position)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  listToConsole() {
+    let current = this.head;
+    let position = 1;
+    while(position <= this.size) {
+      console.log(`Node at position ${position}`, current);
+      current = current.next;
+      position++;
     }
   }
 }
