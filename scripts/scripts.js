@@ -155,23 +155,19 @@ class LinkedList {
     let nextBackup = node1.next;
     // Swap the nodes .next and .previous pointers.
     node1.next = node2.next;
-    // If node1 is the same node as node2.previous, this means the two are side by side and will be swapped, so we can set node1's .previous to node2.
+    // If node1 is the same node as node2.previous, this means the two are side by side and their positions will be flipped, so we can set node1's .previous to node2.
     node1 !== node2.previous ? node1.previous = node2.previous : node1.previous = node2;
-    // If node2 is the same as node1.next, this means the two are side by side and will be swapped, so we can set node2's .next to node1.
+    // If node2 is the same as node1.next, this means the two are side by side and their positions will be flipped, so we can set node2's .next to node1.
     node2 !== nextBackup ? node2.next = nextBackup : node2.next = node1;
     node2.previous = previousBackup;
-    // Handle updating adjacent node pointers here as well.
-    if(node1 !== this.head) {
-      node1.previous.next = node1;
+    // Handle updating adjacent node pointers
+    node2.next.previous = node2;
+    node1.previous.next = node1;
+    if(node1 !== this.head) { // we check if node1 was the head before the swap (becaue we haven't updated this.tail and this.head references yet)
+      node2.previous.next = node2; // and we adjust node2's .previous node if it wasn't
     }
-    if(node2 !== this.head) {
-      node2.previous.next = node2;
-    }
-    if(node1 !== this.tail) {
-      node1.next.previous = node1;
-    }
-    if(node2 !== this.tail) {
-      node2.next.previous = node2;
+    if(node2 !== this.tail) { // then we check if node2 was the tail before the swap
+      node1.next.previous = node1; // and if it wasn't, we adjust node1's .next node
     }
     // After swapping the nodes we check if either are now the head or tail. Can make a method for this later to call and check + update tail and head on the passed node
     this.#adjustListBoundaries(node1);
