@@ -71,6 +71,11 @@ To use this implementation, you can follow these steps:
     let searchResult = myList.search("Name", "Shaun"); // Returns all nodes with an object property "Name" containing the value "Shaun".
     ```
 
+11. You can reverse the linked list by using the `reverse()` method:
+    ```javascript
+    myList.reverse() // Will reverse the linked list by inverting each node's .next and .previous pointers.
+    ```
+
 ## Methods
 
 - `appendNode(data)`: Adds a node to the end of the list.
