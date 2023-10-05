@@ -81,6 +81,11 @@ To use this implementation, you can follow these steps:
     myList.removeDuplicates() // Removes any nodes containing duplicate data
     ```
 
+13. You can return a node by its position using the `getNodeByPosition(pos)` method:
+    ```JavaScript
+    myList.getNodeByPosition(2); // Returns the node that occupies the second position in the linked list.
+    ```
+
 ## Methods
 
 - `append(data)`: Adds a node to the end of the list.
@@ -90,11 +95,12 @@ To use this implementation, you can follow these steps:
 - `getMiddleNode()`: Returns the middle node of the list.
 - `swap(pos1, pos2)`: Swaps the positions of two nodes in the list.
 - `swapProperties(pos1, pos2, property)`: Swaps the properties of two nodes.
-- `splice(start, end)`: Creates a new linked list from a portion of the original list.
+- `splice(start, end)`: Returns a new linked list from a portion of the original list.
 - `log`: Prints the current state of the list to the console.
-- `search(property, value)`: returns an array containing all nodes with data containing the matching property and property value.
+- `search(property, value)`: returns an array containing all nodes with data matching the search criteria.
 - `reverse()`: reverses the linked list.
 - `removeDuplicates()`: finds and removes nodes with duplicate data.
+- `getNodeByPosition(position)`: returns the node occupying the specified position.
 
 ## Note
 
