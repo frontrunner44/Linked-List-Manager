@@ -63,8 +63,8 @@ class LinkedList {
       newNode.next = current.next; // then set the new node's "next" property to reference the node that comes after the current node, since the new node will be placed after the current node
       newNode.previous = current; // Finally, we set the "previous" property of the new node to a reference to the current node and
       current.next = newNode; // set the current node's "next" property to a reference of the new node.
+      this.size++; // only increase size in the else statement, since we increase size in the append or prepend methods since they can be called directly
     }
-    this.size++;
     this.listToConsole();
   }
 
