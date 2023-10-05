@@ -53,7 +53,7 @@ To use this implementation, you can follow these steps:
    myList.listToConsole();
    ```
 
-8. You can also splice a portion of the list into a new linked list using the `splice(start, end)` method:
+8. You can splice a portion of the list into a new linked list using the `splice(start, end)` method:
 
    ```javascript
    const spliced = myList.splice(2, 4); // Creates a new linked list from positions 2 to 4
@@ -61,9 +61,15 @@ To use this implementation, you can follow these steps:
 
 9. To swap the properties of two nodes, use the `swapNodeProperties(pos1, pos2, property)` method:
 
-   ```javascript
-   myList.swapNodeProperties(1, 3, "data"); // Swaps the data properties of nodes at positions 1 and 3
-   ```
+    ```javascript
+    myList.swapNodeProperties(1, 3, "data"); // Swaps the data properties of nodes at positions 1 and 3
+    ```
+
+10. You can search for nodes based on specific properties and values using the `search(property, value)` method. This method scans through the data objects of each node in the list and returns an array containing all nodes that match the provided criteria.
+   
+    ```javascript
+    let searchResult = myList.search("Name", "Shaun"); // Returns all nodes with an object property "Name" containing the value "Shaun".
+    ```
 
 ## Methods
 
