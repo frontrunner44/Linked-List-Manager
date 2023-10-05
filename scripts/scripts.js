@@ -216,6 +216,25 @@ class LinkedList {
       position++;
     }
   }
+
+  // Searches each node's data for the property and property value provided and returns an array of all matches.
+  search(property, value) {
+    if (typeof property !== 'string' || value === undefined) {
+      throw new Error('Invalid or missing property or value. Please provide a valid property name and value.');
+    }
+    let result = []; // Initialize an array to store the results
+    let current = this.head; // Start checking from the head of the current list.
+    let position = 1;
+    while(position <= this.size) {
+      if(current.data.hasOwnProperty(property) && current.data[property] === value) {
+        result.push(current);
+      }
+      current = current.next;
+      position++
+    }
+    console.log(result);
+    return result;
+  }
 }
 
 const myList = new LinkedList;
