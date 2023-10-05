@@ -15,7 +15,7 @@ class LinkedList {
   }
 
   // Add a node to the end of the list.
-  appendNode(data) {
+  append(data) {
     console.log("Append called");
     const newNode = new Node(data); // Creates a new node
     if(!this.head) { // If there is no head, the list is empty
@@ -29,7 +29,7 @@ class LinkedList {
   }
 
   // Add a node to the front of the list.
-  prependNode(data) {
+  prepend(data) {
     console.log("Prepend called.");
     const newNode = new Node(data);
     if(!this.head) { // If there is no head, the list is empty
@@ -49,14 +49,14 @@ class LinkedList {
   }
 
   // Inserts a node at a specific position in the list.  
-  insertNode(data, position) {
+  insert(data, position) {
     const newNode = new Node(data);
     if(position > this.size+1 || position === 0 || isNaN(position)) { // We use this.size+1 because we want to allow inserting the new node to the end (if the list is 5 long, we can insert 6 to put it in position 6, ie at the end)
       throw new Error("Invalid position.");
     } else if(position === 1) { // If position is 1, we want to insert the new node at the start of the list into position 1
-      this.prependNode(data);
+      this.prepend(data);
     } else if(position === this.size+1) { // If the position is 1 more than the list size, we want this node to be placed at the end of the list and for it to become the new tail
-      this.appendNode(data);
+      this.append(data);
     } else { // otherwise if position is not 1 or 1 greater than the list size, we will insert it at the given position, so we'll call a function to retrieve the position BEFORE the position we want to place the new node so we can place the new node after
       let current = this.getNodeByPosition(position-1); // Grab the position directly BEFORE the node that is currently in the position we want to insert the new node so we can place the new node AFTER this node.
       current.next.previous = newNode; // Set the "previous" property of the node that comes after the current node to reference the newly created node,
@@ -65,7 +65,7 @@ class LinkedList {
       current.next = newNode; // set the current node's "next" property to a reference of the new node.
       this.size++; // only increase size in the else statement, since we increase size in the append or prepend methods since they can be called directly
     }
-    this.listToConsole();
+    this.log();
   }
 
   // Function that will return a node when provided with a node position. Will traverse the list either forwards or backwards, depending on which is faster.
@@ -97,7 +97,7 @@ class LinkedList {
   }
 
   // Method to delete nodes by their position.
-  deleteNode(position) {
+  delete(position) {
     let current = this.getNodeByPosition(position); // Grabs the node we want to delete
     if(this.size === 1) { // If the node we want to delete is the only node in the list, we essentially empty the list
       this.head = null;
@@ -115,7 +115,7 @@ class LinkedList {
     // And finally, we disconnect this node from the list and reduce the list size.
     this.#disconnectNode(current);
     this.size--;
-    this.listToConsole();
+    this.log();
   }
 
   #disconnectNode(node) {
@@ -124,14 +124,14 @@ class LinkedList {
   }
 
   // Method for grabbing the middle node. Uses the getNodeByPosition helper method.
-  getMiddleNode() {
+  getMiddle() {
     const result = this.getNodeByPosition(this.size/2);
     console.log(result);
     return result;
   }
 
   // Swaps the properties of two nodes. This can be a more efficient method of swapping node positions via swapping their data references.
-  swapNodeProperties(pos1, pos2, property) {
+  swapProperties(pos1, pos2, property) {
     const node1 = this.getNodeByPosition(pos1); // Get a refernce to the first node
     const node2 = this.getNodeByPosition(pos2); // Get a reference to the second node
     if(this.#isInvalidPosition(pos1) || this.#isInvalidPosition(pos2) || pos1 === pos2 || property === "next" || property === "previous") {
@@ -142,11 +142,11 @@ class LinkedList {
     const node1Prop = node1[property];
     node1[property] = node2[property];
     node2[property] = node1Prop;
-    this.listToConsole();
+    this.log();
   }
 
   // This method does a "hard" swap on the nodes, which essentially keeps the nodes in tact and exchanges their .next and .previous references. This is for more complex linked lists where not all nodes are necessarily interchangable via the swapping of their data or other properties.
-  swapNodes(pos1, pos2) {
+  swap(pos1, pos2) {
     console.log("Swap called with positions:", pos1, pos2);
     if(this.#isInvalidPosition(pos1) || this.#isInvalidPosition(pos2) || pos1 === pos2) {
       throw new Error("Invalid positions provided.");
@@ -176,7 +176,7 @@ class LinkedList {
     // After swapping the nodes we check if either are now the head or tail. Can make a method for this later to call and check + update tail and head on the passed node
     this.#adjustListBoundaries(node1);
     this.#adjustListBoundaries(node2);
-    this.listToConsole();
+    this.log();
   }
 
   splice(start, end) {
@@ -189,7 +189,7 @@ class LinkedList {
     splicedList.head = newHead;
     splicedList.tail = newTail;
     splicedList.size = end - start + 1;
-    splicedList.listToConsole();
+    splicedList.log();
     return splicedList;
   }
 
@@ -211,7 +211,7 @@ class LinkedList {
     }
   }
 
-  listToConsole() {
+  log() {
     let current = this.head;
     let position = 1;
     while(position <= this.size) {
@@ -250,7 +250,21 @@ class LinkedList {
     const tempHead = this.head;
     this.head = this.tail;
     this.tail = tempHead;
-    this.listToConsole();
+    this.log();
+  }
+
+  removeDuplicates() {
+    // Loops through every node and compares it to the nodes in front of it to look for duplicates. Stops one shy of the last node, since by the time we get to that node it has already been compared to every previous node.
+    for(let i = 1; i < this.size; i++) {
+      const currentNode = this.getNodeByPosition(i); // Grabs the node at position i
+      for(let b = i+1; b <= this.size; b++) {
+        const compareNode = this.getNodeByPosition(b); // Grabs the node at position b
+        if(currentNode.data === compareNode.data) { // If the nodes' data match, we
+          console.log(`Duplicate found with nodes ${i} and ${b}`);
+          this.delete(b); // delete the node at position b
+        }
+      }
+    }
   }
 }
 
@@ -260,8 +274,8 @@ const myList = new LinkedList;
 function generateLinkedList(amount) {
   for(let i = 1; i <= amount; i++) {
     const data = `This should initially be in position ${i}`; //Math.floor(Math.random() * (100000 - 1 + 1)) + 1;
-    myList.appendNode(data);
+    myList.append(data);
   }
-  myList.listToConsole();
+  myList.log();
   console.log(myList);
 }
