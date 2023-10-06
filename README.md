@@ -85,6 +85,14 @@ To use this implementation, you can follow these steps:
     ```JavaScript
     myList.getNodeByPosition(2); // Returns the node that occupies the second position in the linked list.
     ```
+14. You can return a deep copy of the linked list using the `deepClone()` method:
+    ```JavaScript
+    const myNewList = myList.deepClone() // Makes myNewList a deep clone of myList.
+    ```
+15. You can return a spliced deep copy of the linked list using the `deepSplice()` method:
+    ```JavaScript
+    const myNewSplicedList = myList.deepSplice(5,10) // Makes myNewSplicedList a deep clone of myList starting from node position 5 to node position 10.
+    ```
 
 ## Methods
 
@@ -101,6 +109,8 @@ To use this implementation, you can follow these steps:
 - `reverse()`: reverses the linked list.
 - `removeDuplicates()`: finds and removes nodes with duplicate data.
 - `getNodeByPosition(position)`: returns the node occupying the specified position.
+- `deepClone()`: Creates a deep copy of the entire linked list, including all nodes and their data.
+- `deepSplice(start, end)`: Returns a spliced, deep copy of the linked list, preserving the structure of the original linked list from positions start to end.
 
 ## Note
 
