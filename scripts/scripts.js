@@ -267,12 +267,20 @@ class LinkedList {
     }
   }
 
+  // Returns a deep copy of the linked list
   deepClone() {
     const newList = new LinkedList();
     newList.size = this.size; 
     newList.head = structuredClone(this.head); // DEEP clones the entire object chain starting from the head.
     newList.tail = newList.getNodeByPosition(newList.size, true); // We can't deep clone here, otherwise we'll end up with two separate object chains. We also have to force forward traversal, since the current tail is null.
     return newList;
+  }
+
+  // Returns a spliced, deep copy of the linked list.
+  deepSplice(start, end) {
+    const splicedList = this.splice(start, end); // Gets a spliced (shallow) copy of the linked list
+    splicedList.head.previous = null; // Disconnect the head before deep cloning to avoid traversing the head's .previous reference.
+    return splicedList.deepClone();
   }
 }
 
