@@ -69,12 +69,12 @@ class LinkedList {
   }
 
   // Function that will return a node when provided with a node position. Will traverse the list either forwards or backwards, depending on which is faster.
-  getNodeByPosition(position) {
+  getNodeByPosition(position, forceForward) {
     if(this.#isInvalidPosition(position)) {
       throw new Error("Invalid position provided.");
     } else {
       let edge, direction, steps;
-      if (position <= this.size / 2) { // If the postition of the requested node is at the first half of the list
+      if (position <= this.size / 2 || forceForward) { // If the postition of the requested node is at the first half of the list
         console.log("Traversing forward");
         edge = "head"; // we set the edge to start at to be the head,
         direction = "next"; // the property we traverse to be "next", and
@@ -265,6 +265,14 @@ class LinkedList {
         }
       }
     }
+  }
+
+  deepClone() {
+    const newList = new LinkedList();
+    newList.size = this.size; 
+    newList.head = structuredClone(this.head); // DEEP clones the entire object chain starting from the head.
+    newList.tail = newList.getNodeByPosition(newList.size, true); // We can't deep clone here, otherwise we'll end up with two separate object chains. We also have to force forward traversal, since the current tail is null.
+    return newList;
   }
 }
 
